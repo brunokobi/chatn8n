@@ -2,6 +2,8 @@
 
 <div align="center">
 
+
+
 ![chatBruno Banner](https://img.shields.io/badge/chatBruno-Multi--Agente%20RAG-6C63FF?style=for-the-badge&logo=robot&logoColor=white)
 
 [![n8n](https://img.shields.io/badge/n8n-Workflow%20Automation-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)](https://n8n.io)
@@ -24,6 +26,11 @@
 [🌐 Portfolio](https://brunokobi.netlify.app) · [🚀 Portfolio 3D](https://brunokobi3d.netlify.app) · [💻 GitHub](https://github.com/brunokobi) · [🔗 LinkedIn](https://linkedin.com/in/brunokobi)
 
 </div>
+
+<img src="print.png" width="100%" alt="Workflow Print 1" />
+<img src="print2.png" width="100%" alt="Workflow Print 2" />
+
+<br/>
 
 ---
 

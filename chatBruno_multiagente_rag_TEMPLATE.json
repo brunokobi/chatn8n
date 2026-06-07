@@ -1,0 +1,653 @@
+{
+  "name": "chatBruno - Multi-Agente RAG",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -512,
+        640
+      ],
+      "id": "f16369c6-2746-4220-96ef-007b688eeb2b",
+      "name": "When chat message received",
+      "webhookId": "860456de-05c8-40bf-9ba2-cbca916a026d"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "Você é um roteador inteligente. Analise a mensagem do usuário e classifique em UMA das categorias abaixo. Responda APENAS com a palavra da categoria, sem explicação.\n\nCategorias:\n- PERFIL: perguntas sobre quem é Bruno, história, filosofia, apresentação\n- SKILLS: perguntas sobre tecnologias, linguagens, frameworks, ferramentas\n- EXPERIENCIA: perguntas sobre empregos, empresas, cargos, período\n- EDUCACAO: perguntas sobre formação, mestrado, graduação, cursos\n- PROJETOS: perguntas sobre projetos desenvolvidos, portfólio\n- CONTATO: perguntas sobre como entrar em contato, links, redes sociais\n- GERAL: qualquer outra pergunta sobre Bruno\n\nMensagem: {{ $json.chatInput }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        640
+      ],
+      "id": "e2e42e54-bbbb-43ef-857e-354f4d0e4443",
+      "name": "Agente Roteador"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        816
+      ],
+      "id": "ea9d1b20-445f-4fc2-b6c9-5c62196c21a5",
+      "name": "Gemini Roteador",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_GOOGLE_GEMINI_CREDENTIAL_ID",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "PERFIL",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "0f5f7639-df0a-43c8-a285-7dd6fafa9c77"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PERFIL"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "SKILLS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "d73fb255-6f09-4cae-bb00-32f02f30a9ae"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SKILLS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "EXPERIENCIA",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "ed27d6cd-1abf-477c-b6e9-860ee9220f34"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "EXPERIENCIA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "EDUCACAO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "7e517c78-9d3f-4107-be70-c6753d273f76"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "EDUCACAO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "PROJETOS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "cd0d0d2d-e923-4bf8-b679-51cf3b0d3433"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "PROJETOS"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "CONTATO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "4ca388e0-f2c3-4983-be6e-d9965e550c32"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CONTATO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        48,
+        656
+      ],
+      "id": "31bb1bf4-a0de-4ad7-9549-227724a07d9a",
+      "name": "Roteador de Intenção"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\n\nDIRETRIZES:\n- Responda sobre quem é Bruno, sua história e filosofia de vida\n- Mencione a transição de carreira de 2017 como símbolo de resiliência\n- Tom convidativo: 'Vamos construir o futuro juntos!'\n- Se não souber, direcione para o site: https://brunokobi.netlify.app"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        448,
+        176
+      ],
+      "id": "fa4060d1-f063-4fe5-b477-5b3b41417a61",
+      "name": "Agente Perfil"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\nDIRETRIZES:\n- Liste as tecnologias com confiança: Python, React, TypeScript, Node.js, Java, PHP, etc.\n- Destaque o foco atual em IA, LangChain, n8n e automação\n- Seja específico sobre frameworks e ferramentas\n- Se não souber, direcione para o GitHub: https://github.com/brunokobi"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        432,
+        448
+      ],
+      "id": "e3ce4b95-cc98-4b8c-b73c-4ff80011b5cd",
+      "name": "Agente Skills"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\nDIRETRIZES:\n- Detalhe as experiências profissionais com empresa, cargo e período\n- Destaque tecnologias usadas em cada empresa\n- Mencione metodologias ágeis (Scrum) quando relevante\n- Se não souber, direcione para o LinkedIn: https://www.linkedin.com/in/brunokobi"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        512,
+        672
+      ],
+      "id": "bb7c1fee-a94e-4d50-b11e-3f899c0c1267",
+      "name": "Agente Experiência"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\nDIRETRIZES:\n- Detalhe a formação acadêmica: UFES (mestrado atual), IFES mestrado IA, Unisales graduação, IFES técnico\n- Mencione pesquisa sobre anomalias em poços de petróleo\n- Destaque a dedicação contínua ao aprendizado\n- Se não souber, direcione para o site: https://brunokobi.netlify.app"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        464,
+        864
+      ],
+      "id": "363ff319-aae4-44d7-bcf3-b04f5a85cf52",
+      "name": "Agente Educação"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\nDIRETRIZES:\n- Detalhe os projetos: Presence Now, Guia Alimentar BR, Portfólio 3D, etc.\n- Mencione tecnologias usadas em cada projeto\n- Destaque impactos e conquistas (publicação na Play Store, congresso de nutrição, etc.)\n- Direcione para o GitHub: https://github.com/brunokobi"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        480,
+        1040
+      ],
+      "id": "2417a8c0-aaba-4916-8580-cb3a153f1813",
+      "name": "Agente Projetos"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\nDIRETRIZES:\n- Forneça os links de contato: site, GitHub, LinkedIn\n- Email: brunokobi2@hotmail.com\n- Telefone: (27) 99945-2979\n- Seja convidativo e profissional\n- Finalize com: 'Vamos construir o futuro juntos!'"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        576,
+        1264
+      ],
+      "id": "4dc95628-3499-41c1-a5dd-20daa6168c3d",
+      "name": "Agente Contato"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "=Você é o assistente virtual de Bruno Kobi. Responda SEMPRE em primeira pessoa.\n\n\nDIRETRIZES:\n- Responda qualquer pergunta sobre Bruno de forma completa\n- Tom profissional e apaixonado por tecnologia\n- Não responda perguntas fora do contexto de Bruno\n- Se não souber, direcione para o site: https://brunokobi.netlify.app\n- Finalize com: 'Vamos construir o futuro juntos!'"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        592,
+        1584
+      ],
+      "id": "b77972fc-d874-4d53-9cd7-3a71a107ff27",
+      "name": "Agente Geral"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        560
+      ],
+      "id": "5abd005f-a1f8-43c4-8a67-d9a1b696728d",
+      "name": "Gemini Agentes",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_GOOGLE_GEMINI_CREDENTIAL_ID",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When chat message received').item.json.sessionId ?? 'default' }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1392,
+        976
+      ],
+      "id": "e2525f49-e576-42aa-ac19-0b666f802d04",
+      "name": "Memória da Conversa"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "buscar_conhecimento_bruno",
+        "toolDescription": "Busca informações sobre Bruno Kobi na base de conhecimento vetorial. Use para responder qualquer pergunta sobre Bruno.",
+        "tableName": "documents",
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        816
+      ],
+      "id": "b36c1ec4-8133-4951-8aec-dca6a7388038",
+      "name": "Busca Vetorial Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "YOUR_SUPABASE_CREDENTIAL_ID",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-embedding-001"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        960
+      ],
+      "id": "268b2a81-e4b3-4f79-89bf-0bdd18b0b6b3",
+      "name": "Embeddings Retriever",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_GOOGLE_GEMINI_CREDENTIAL_ID",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Agente Roteador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Roteador": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Roteador",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Roteador": {
+      "main": [
+        [
+          {
+            "node": "Roteador de Intenção",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Roteador de Intenção": {
+      "main": [
+        [
+          {
+            "node": "Agente Perfil",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Skills",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Experiência",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Educação",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Projetos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Contato",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Geral",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Agentes": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Perfil",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Skills",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Experiência",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Educação",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Projetos",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Contato",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agente Geral",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memória da Conversa": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agente Perfil",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Skills",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Experiência",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Educação",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Projetos",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Contato",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Agente Geral",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Vetorial Supabase": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente Perfil",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Skills",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Experiência",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Educação",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Projetos",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Contato",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Agente Geral",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Retriever": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Busca Vetorial Supabase",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "VERSION_ID",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
+  },
+  "id": "WORKFLOW_ID",
+  "tags": []
+}
